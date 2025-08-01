@@ -11,6 +11,15 @@ const createSubmission = async (payload: ISubmission) => {
     throw new AppError(httpStatus.NOT_FOUND, "Assignment not found!");
   }
 
+  const currentTime = new Date();
+  const deadline = new Date(assignment.deadline);
+  if (currentTime > deadline) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      "Deadline has passed! Submission is closed."
+    );
+  }
+
   const student = await User.findById(payload.student);
   if (!student || student.role !== "student") {
     throw new AppError(httpStatus.BAD_REQUEST, "Invalid student information!");
@@ -33,16 +42,17 @@ const createSubmission = async (payload: ISubmission) => {
 };
 
 const getMySubmissions = async (studentId: string) => {
-  const submissions = await Submission.find({ student: studentId }).populate(
-    "assignment"
-  );
+  const submissions = await Submission.find({ student: studentId })
+    .populate("assignment")
+    .sort({ createdAt: -1 });
   return submissions;
 };
 
 const getAllSubmissionsByAssignment = async (assignmentId: string) => {
   const submissions = await Submission.find({ assignment: assignmentId })
     .populate("student")
-    .populate("assignment");
+    .populate("assignment")
+    .sort({ createdAt: -1 });
 
   return submissions;
 };

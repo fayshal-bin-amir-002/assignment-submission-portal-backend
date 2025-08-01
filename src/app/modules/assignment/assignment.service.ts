@@ -19,7 +19,7 @@ const createAssignment = async (payload: IAssignment) => {
 };
 
 const getAllAssignments = async () => {
-  const result = await Assignment.find();
+  const result = await Assignment.find().sort({ createdAt: -1 });
   return result;
 };
 
