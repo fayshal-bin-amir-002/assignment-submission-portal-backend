@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { UserRole } from "../modules/user/user.interface";
 
 export interface IJwtPayload {
+  id: string;
   email: string;
   role: UserRole;
 }

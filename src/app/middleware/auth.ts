@@ -1,9 +1,9 @@
 import jwt, { JwtPayload, TokenExpiredError } from "jsonwebtoken";
 import AppError from "../errors/appError";
-import { UserRole } from "../modules/user/user.interface";
 import catchAsync from "../utils/catchAsync";
 import httpStatus from "http-status";
 import config from "../config";
+import { UserRole } from "../modules/user/user.interface";
 import User from "../modules/user/user.model";
 
 const auth = (...requiredRoles: UserRole[]) => {
@@ -19,7 +19,7 @@ const auth = (...requiredRoles: UserRole[]) => {
         config.jwt_access_secret as string
       ) as JwtPayload;
       const { email, role } = decode;
-      // await User.isUserExistsById(userId);
+      await User.isUserExists(email);
       if (requiredRoles && !requiredRoles.includes(role)) {
         throw new AppError(httpStatus.UNAUTHORIZED, "Unauthorized access");
       }

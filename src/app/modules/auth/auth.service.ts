@@ -6,11 +6,12 @@ import config from "../../config";
 
 const loginUser = async (payload: IAuth) => {
   const user = await User.isUserExists(payload?.email);
-  const { email, role, password } = user;
+  const { email, role, password, _id } = user;
 
   await User.isPasswordMatched(payload?.password, password);
 
   const jwtPayload: IJwtPayload = {
+    id: _id as string,
     email,
     role,
   };

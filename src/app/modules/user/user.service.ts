@@ -1,10 +1,9 @@
 import AppError from "../../errors/appError";
-import { IUser, UserRole } from "./user.interface";
+import { IUser } from "./user.interface";
 import httpStatus from "http-status";
 import User from "./user.model";
 import { createToken, IJwtPayload } from "../../utils/token.utils";
 import config from "../../config";
-import QueryBuilder from "../../builder/QueryBuilder";
 
 const registerUser = async (payload: IUser) => {
   const user = await User.isUserExists(payload?.email);
@@ -14,9 +13,10 @@ const registerUser = async (payload: IUser) => {
   }
 
   const result = await User.create(payload);
-  const { email, role } = result;
+  const { email, role, _id } = result;
 
   const jwtPayload: IJwtPayload = {
+    id: _id as string,
     email,
     role,
   };
