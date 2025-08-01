@@ -12,7 +12,6 @@ const userSchema = new Schema<IUser, UserModel>(
     role: {
       type: String,
       enum: Object.values(UserRole),
-      default: UserRole.STUDENT,
     },
   },
   {
@@ -24,11 +23,7 @@ userSchema.set("toJSON", {
   transform: (_doc, ret) => {
     return {
       _id: ret._id,
-      name: ret.name,
       email: ret.email,
-      phoneNumber: ret.phoneNumber,
-      location: ret.location,
-      isActive: ret.isActive,
       role: ret.role,
     };
   },

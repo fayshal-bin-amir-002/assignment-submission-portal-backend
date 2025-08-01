@@ -7,10 +7,6 @@ import config from "../../config";
 import QueryBuilder from "../../builder/QueryBuilder";
 
 const registerUser = async (payload: IUser) => {
-  if ([UserRole.INSTRUCTOR].includes(payload?.role)) {
-    throw new AppError(httpStatus.NOT_ACCEPTABLE, "Invalid user info!");
-  }
-
   const user = await User.isUserExists(payload?.email);
 
   if (user) {
